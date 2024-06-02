@@ -30,7 +30,7 @@ function View.render(state)
       return ""
     end
 
-    display = [[ %#Type# ]] .. " " .. state.options.doing_prefix .. current
+    display = [[ %#FloatBorder# ]] .. " " .. state.options.doing_prefix .. current
 
     -- append task count number if there is more than 1 task
     if count > 1 then
