@@ -10,7 +10,7 @@ local utils = require("doing.utils")
 ---@param str string Text to display
 ---@param hl? string Highlight group
 function C.show_message(str, hl)
-  state.message = "%#" .. (hl or "TablineSel") .. "#" .. str
+  state.message = string.rep(' ', vim.fn.winwidth(0) - 4 - string.len(str)) .. str
 
   vim.defer_fn(function()
     state.message = nil
@@ -88,7 +88,7 @@ function C.setup_winbar(options)
   state.auGroupID = vim.api.nvim_create_augroup("doing_nvim", { clear = true })
 
   -- winbar should not be displayed in windows the cursor is not in
-  vim.api.nvim_create_autocmd({ "WinEnter", "WinLeave","BufEnter", "BufLeave" }, {
+  vim.api.nvim_create_autocmd({ "WinEnter", "WinLeave", "BufEnter", "BufLeave" }, {
     group = state.auGroupID,
     callback = function()
       C.redraw_winbar()
