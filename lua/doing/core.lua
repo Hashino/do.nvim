@@ -10,7 +10,7 @@ local utils = require("doing.utils")
 ---@param str string Text to display
 ---@param hl? string Highlight group
 function C.show_message(str, hl)
-  state.message = string.rep(' ', vim.fn.winwidth(0) - 4 - string.len(str)) .. str
+  state.message = --[[ string.rep(' ', vim.fn.winwidth(0) - 4 - string.len(str)) .. ]] str
 
   vim.defer_fn(function()
     state.message = nil

@@ -1,0 +1,11 @@
+{
+    "diagnostics.globals": [
+        "vim",
+        "screen",
+        "awesome",
+        "root",
+        "client",
+        "tag",
+        "width"
+    ]
+}

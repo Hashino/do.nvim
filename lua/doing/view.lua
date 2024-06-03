@@ -9,17 +9,17 @@ end
 
 ---Create a winbar string for the current task
 ---@param state DoState
----@return string
+---@return string|table
 function View.render(state)
   if not View.is_visible(state) then
-    return ""
+    return { left = '', middle = '', right = '' }
   end
+  local right = ""
 
   -- using pcall so that it won't spam error messages
-  local ok, display = pcall(function()
+  local ok, left = pcall(function()
     local count = state.tasks:count()
-    local left = ""
-    local right = ""
+    local res = ""
     local aligned = false
     local current = state.tasks:current()
 
@@ -31,7 +31,7 @@ function View.render(state)
       return ""
     end
 
-    left = state.options.doing_prefix .. current
+    res = state.options.doing_prefix .. current
 
     -- append task count number if there is more than 1 task
     if count > 1 then
@@ -40,18 +40,25 @@ function View.render(state)
     end
 
     if not state.tasks.file then
-      left = left .. (aligned and "" or "%=") .. "(:DoSave)"
+      res = res .. (aligned and "" or "%=") .. "(:DoSave)"
     end
 
-    local middle = string.rep(' ', vim.fn.winwidth(0) - string.len(left) - string.len(right) - 4)
-    return left .. middle .. right
+    return res
   end)
 
   if not ok then
-    return "ERR: " .. display
+    return "ERR: " .. left
   end
 
-  return display
+  width = tonumber(vim.api.nvim_command_output("echo &columns")) or 0
+
+  local res = {
+    left = ' ' .. left,
+    middle = string.rep(' ', tonumber(width) - string.len(left) - string.len(right) - 2),
+    right = right .. ' ',
+  }
+
+  return res
 end
 
 function View.render_inactive(state)
